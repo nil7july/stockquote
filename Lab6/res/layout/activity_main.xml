@@ -1,0 +1,57 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+	tools:context="${relativePackage}.${activityClass}" >
+    <EditText
+        android:id="@+id/addressbar"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/goButton"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/goButton"
+        android:ems="10"/>
+
+    <Button
+        android:id="@+id/goButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:onClick="goButtonClick"
+        android:text="Go" />
+
+    <WebView
+        android:id="@+id/browser"
+        android:layout_width="100dp"
+        android:layout_height="200dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/addressbar" />
+
+    <EditText
+        android:id="@+id/stockName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/browser"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:ems="10"
+        android:text="Name"
+        android:textAllCaps="true"
+        android:textSize="30sp" />
+
+    <EditText
+        android:id="@+id/stockPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/stockName"
+        android:layout_centerHorizontal="true"
+        android:ems="10"
+        android:text="Price"
+        android:textAllCaps="true"
+        android:textIsSelectable="false"
+        android:textSize="30sp" />
+
+</RelativeLayout>
