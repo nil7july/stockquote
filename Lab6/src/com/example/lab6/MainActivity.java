@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -17,6 +19,8 @@ import org.json.JSONObject;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
@@ -26,8 +30,13 @@ public class MainActivity extends Activity {
 
 	EditText searchbox;
 	WebView webview;
-	EditText stockname, stockprice;
-	
+	EditText stockname, stockprice, updatetime;
+   	Handler mHandler = new Handler();
+   	Thread myThread;
+   	boolean running = false;
+   	private SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss");
+   	String name;
+   	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,15 +46,47 @@ public class MainActivity extends Activity {
 	   	searchbox =  (EditText) findViewById(R.id.addressbar);
 	   	stockname =  (EditText) findViewById(R.id.stockName);
 	   	stockprice =  (EditText) findViewById(R.id.stockPrice);
+	   	updatetime = (EditText) findViewById(R.id.updateTime);
+	   	
+	   	
     }
     
-    
-    public void goButtonClick(View view) {
-    	
-    	String name = searchbox.getText().toString().replaceAll("\\s+","");
+    public void updateStock(){
     	
     	new RetrieveCode().execute("http://finance.yahoo.com/webservice/v1/symbols/" + name + "/quote?format=json");
     	
+    }
+    
+    public void goButtonClick(View view) {
+    	name = searchbox.getText().toString().replaceAll("\\s+","");
+    	    	
+    	updateStock();
+        myThread = new Thread(new Runnable() {
+	        @Override
+	        public void run() {
+	            // TODO Auto-generated method stub
+	            String prevName = name;
+	        	while (prevName == name) {
+	                try {
+	                		                	
+	                    Thread.sleep(10000);
+	                    mHandler.post(new Runnable() {
+
+	                        @Override
+	                        public void run() {
+	                            updateStock();
+	                            System.out.println("updated stock: ");
+
+	                        }
+	                    });
+	                } catch (Exception e) {
+	                  System.out.println("ERror occured here " + e);
+	                }
+	            }
+	        }
+	    });
+        myThread.start();
+        running = true;
     }
     
     private class RetrieveCode extends AsyncTask<String, Void, String> {
@@ -106,6 +147,7 @@ public class MainActivity extends Activity {
     		JSONObject fields = resource.getJSONObject("fields");
     		stockname.setText(fields.getString("name"));
     		stockprice.setText(fields.getString("price"));
+    		updatetime.setText(sdf.format(new Date(System.currentTimeMillis())));
     	}	
     }   
 }

@@ -54,4 +54,12 @@
         android:textIsSelectable="false"
         android:textSize="30sp" />
 
+    <EditText
+        android:id="@+id/updateTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/stockPrice"
+        android:layout_toLeftOf="@+id/goButton"
+        android:ems="10" />
+
 </RelativeLayout>
